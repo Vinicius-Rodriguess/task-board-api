@@ -12,7 +12,7 @@ export class Note {
   @Column({ length: 255, nullable: false })
   name: string;
 
-  @Column({ length: 255 })
+  @Column({ length: 2000 })
   description: string;
 
   @Column({ type: 'boolean', default: false })
