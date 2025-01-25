@@ -1,24 +1,22 @@
 import {
   Column,
   CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity({ name: 'tb_user' })
-export class User {
-  @PrimaryGeneratedColumn()
+export class Note {
+  @PrimaryColumn()
   id: number;
 
   @Column({ length: 255, nullable: false })
   name: string;
 
-  @Column({ length: 255, nullable: false })
-  email: string;
+  @Column({ length: 255 })
+  description: string;
 
-  @Column({ length: 255, nullable: false })
-  password: string;
+  @Column({ type: 'boolean', default: false })
+  fixed: boolean;
 
   @CreateDateColumn()
   createdAt: Date;
