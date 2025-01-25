@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { User } from './user/entities/user.entity';
+import { NoteModule } from './note/note.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { User } from './user/entities/user.entity';
       logging: true,
     }),
     UserModule,
+    NoteModule,
   ],
   controllers: [],
   providers: [],
