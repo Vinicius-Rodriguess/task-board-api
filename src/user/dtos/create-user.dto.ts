@@ -6,7 +6,7 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class createUserDto {
+export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(3)
@@ -19,5 +19,5 @@ export class createUserDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(5)
-  passwordHash: string;
+  password: string;
 }
