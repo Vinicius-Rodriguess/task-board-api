@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { Bcrypt } from '../auth/bcript/bcript';
@@ -30,12 +30,14 @@ export class UserService {
   }
 
   async findByEmail(email: string) {
-    return await this.userRepository.findOne({ where: { email } });
+    return await this.userRepository.findOne({
+      where: { email: ILike(`%${email}%`) },
+    });
   }
 
   async create(createUserDto: CreateUserDto) {
     const findUser = await this.findByEmail(createUserDto.email);
-    if (findUser) throw new BadRequestException('Email já cadastrado!');
+    if (findUser) throw new BadRequestException('Email already registered.');
 
     createUserDto.password = await this.bcript.encryptPassword(
       createUserDto.password,
@@ -47,7 +49,7 @@ export class UserService {
   async update(updateUserDto: UpdateUserDto) {
     const findUser = await this.findByEmail(updateUserDto.email);
     if (findUser && findUser.id !== updateUserDto.id)
-      throw new BadRequestException('Email já cadastrado!');
+      throw new BadRequestException('Email already registered.');
 
     updateUserDto.password = await this.bcript.encryptPassword(
       updateUserDto.password,
