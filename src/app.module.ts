@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { User } from './user/entities/user.entity';
 import { NoteModule } from './note/note.module';
+import { Note } from './note/entities/note.entity';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { NoteModule } from './note/note.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [User],
+      entities: [User, Note],
       synchronize: true,
       logging: true,
     }),

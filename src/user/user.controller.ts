@@ -21,6 +21,11 @@ export class UserController {
     return this.userServise.findAll();
   }
 
+  @Get('/:id')
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.userServise.findOne(id);
+  }
+
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.userServise.create(createUserDto);

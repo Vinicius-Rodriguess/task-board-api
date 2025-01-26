@@ -21,6 +21,11 @@ export class NoteController {
     return this.noteService.findAll();
   }
 
+  @Get('/:id')
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.noteService.findOne(id);
+  }
+
   @Post()
   create(@Body() createNoteDto: CreateNoteDto) {
     return this.noteService.create(createNoteDto);
