@@ -5,6 +5,7 @@ import { UserModule } from './user/user.module';
 import { User } from './user/entities/user.entity';
 import { NoteModule } from './note/note.module';
 import { Note } from './note/entities/note.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { Note } from './note/entities/note.entity';
     }),
     UserModule,
     NoteModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
