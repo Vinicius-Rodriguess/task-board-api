@@ -1,4 +1,5 @@
 import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+import { User } from '../../user/entities/user.entity';
 
 export class CreateNoteDto {
   @IsString()
@@ -10,4 +11,7 @@ export class CreateNoteDto {
 
   @IsBoolean()
   fixed?: boolean;
+
+  @IsNotEmpty()
+  user: User;
 }
