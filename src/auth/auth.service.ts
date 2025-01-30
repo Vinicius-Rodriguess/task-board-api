@@ -23,9 +23,8 @@ export class AuthService {
     );
 
     if (findUser && matchPassword) {
-      /* eslint-disable @typescript-eslint/no-unused-vars */
-      const { password, ...response } = findUser;
-      return response;
+      delete findUser.password;
+      return findUser;
     }
 
     return null;
