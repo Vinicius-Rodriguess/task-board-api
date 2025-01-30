@@ -3,6 +3,7 @@ import { Bcrypt } from './bcript/bcript';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 import { UserLogin } from './entitites/user-login.entity';
+import { UserResponse } from './entitites/userResponse.entity';
 
 @Injectable()
 export class AuthService {
@@ -35,12 +36,14 @@ export class AuthService {
 
     const findUser = await this.userService.findByEmail(userLogin.email);
 
-    return {
+    const userResponse: UserResponse = {
       id: findUser.id,
       name: findUser.name,
       email: userLogin.email,
       password: '',
       token: `Bearer ${this.jwtService.sign(payload)}`,
     };
+
+    return userResponse;
   }
 }
