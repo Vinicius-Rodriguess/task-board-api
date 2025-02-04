@@ -15,24 +15,25 @@ import { UpdateUserDto } from './dtos/update-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { TokenPayLoadParam } from '../params/token-payload.param';
 import { TokenPayLoadDto } from '../auth/dtos/token-payload.dto';
+import { AdminGuard } from '../auth/guards/admin.guard';
 
 @Controller('/user')
 export class UserController {
   constructor(private readonly userServise: UserService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @Get()
   findAll() {
     return this.userServise.findAll();
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @Get('/:id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.userServise.findOne(id);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @Get('/email/:email')
   findByEmail(@Param('email') email: string) {
     return this.userServise.findByEmail(email);

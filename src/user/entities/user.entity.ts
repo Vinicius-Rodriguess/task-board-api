@@ -25,6 +25,9 @@ export class User {
   @OneToMany(() => Note, (note) => note.user)
   notes: Note[];
 
+  @Column({ type: 'boolean', default: false })
+  isAdmin: boolean;
+
   @CreateDateColumn()
   createdAt: Date;
 
