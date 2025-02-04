@@ -13,6 +13,8 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { TokenPayLoadParam } from '../params/token-payload.param';
+import { TokenPayLoadDto } from '../auth/dtos/token-payload.dto';
 
 @Controller('/user')
 export class UserController {
@@ -43,13 +45,19 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Put()
-  update(@Body() updateUserDto: UpdateUserDto) {
-    return this.userServise.update(updateUserDto);
+  update(
+    @Body() updateUserDto: UpdateUserDto,
+    @TokenPayLoadParam() token: TokenPayLoadDto,
+  ) {
+    return this.userServise.update(updateUserDto, token);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete('/:id')
-  delete(@Param('id', ParseIntPipe) id: number) {
-    return this.userServise.delete(id);
+  delete(
+    @Param('id', ParseIntPipe) id: number,
+    @TokenPayLoadParam() token: TokenPayLoadDto,
+  ) {
+    return this.userServise.delete(id, token);
   }
 }

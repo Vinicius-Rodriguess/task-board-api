@@ -13,6 +13,8 @@ import { NoteService } from './note.service';
 import { CreateNoteDto } from './dtos/create-note.dto';
 import { UpdateNoteDto } from './dtos/update-note.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { TokenPayLoadDto } from '../auth/dtos/token-payload.dto';
+import { TokenPayLoadParam } from '../params/token-payload.param';
 
 @UseGuards(JwtAuthGuard)
 @Controller('note')
@@ -35,12 +37,18 @@ export class NoteController {
   }
 
   @Put()
-  update(@Body() updateNoteDto: UpdateNoteDto) {
-    return this.noteService.update(updateNoteDto);
+  update(
+    @Body() updateNoteDto: UpdateNoteDto,
+    @TokenPayLoadParam() token: TokenPayLoadDto,
+  ) {
+    return this.noteService.update(updateNoteDto, token);
   }
 
   @Delete('/:id')
-  delete(@Param('id', ParseIntPipe) id: number) {
-    return this.noteService.delete(id);
+  delete(
+    @Param('id', ParseIntPipe) id: number,
+    @TokenPayLoadParam() token: TokenPayLoadDto,
+  ) {
+    return this.noteService.delete(id, token);
   }
 }

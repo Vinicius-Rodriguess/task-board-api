@@ -2,8 +2,8 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { Bcrypt } from './bcript/bcript';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
-import { UserLogin } from './entitites/user-login.entity';
-import { UserResponse } from './entitites/userResponse.entity';
+import { UserLoginDto } from './dtos/user-login.dto';
+import { UserResponseDto } from './dtos/userResponse.dto';
 
 @Injectable()
 export class AuthService {
@@ -30,12 +30,12 @@ export class AuthService {
     return null;
   }
 
-  async login(userLogin: UserLogin) {
-    const payload = { sub: userLogin.email };
-
+  async login(userLogin: UserLoginDto) {
     const findUser = await this.userService.findByEmail(userLogin.email);
 
-    const userResponse: UserResponse = {
+    const payload = { sub: findUser.id };
+
+    const userResponse: UserResponseDto = {
       id: findUser.id,
       name: findUser.name,
       email: userLogin.email,

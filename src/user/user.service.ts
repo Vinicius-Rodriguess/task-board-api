@@ -1,10 +1,15 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { ILike, Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { Bcrypt } from '../auth/bcript/bcript';
+import { TokenPayLoadDto } from '../auth/dtos/token-payload.dto';
 
 @Injectable()
 export class UserService {
@@ -46,20 +51,44 @@ export class UserService {
     return await this.userRepository.save(createUserDto);
   }
 
-  async update(updateUserDto: UpdateUserDto) {
-    const findUser = await this.findByEmail(updateUserDto.email);
-    if (findUser && findUser.id !== updateUserDto.id)
+  async update(updateUserDto: UpdateUserDto, token: TokenPayLoadDto) {
+    const user = await this.findOne(updateUserDto.id);
+
+    if (updateUserDto.id !== Number(token.sub)) {
+      throw new ForbiddenException(
+        'You do not have permission to modify this user.',
+      );
+    }
+
+    const userSameEmail = await this.findByEmail(updateUserDto.email);
+
+    if (userSameEmail && userSameEmail.id !== updateUserDto.id) {
       throw new BadRequestException('Email already registered.');
+    }
 
-    updateUserDto.password = await this.bcript.encryptPassword(
-      updateUserDto.password,
-    );
+    if (updateUserDto.password) {
+      updateUserDto.password = await this.bcript.encryptPassword(
+        updateUserDto.password,
+      );
+    }
 
-    return await this.userRepository.save(updateUserDto);
+    const updatedUser = {
+      ...user,
+      ...updateUserDto,
+    };
+
+    return await this.userRepository.save(updatedUser);
   }
 
-  async delete(id: number) {
+  async delete(id: number, token: TokenPayLoadDto) {
     const user = await this.findOne(id);
+
+    if (user.id !== Number(token.sub)) {
+      throw new ForbiddenException(
+        'You do not have permission to modify this user.',
+      );
+    }
+
     return await this.userRepository.remove(user);
   }
 }

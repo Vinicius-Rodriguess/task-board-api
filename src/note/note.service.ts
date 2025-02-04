@@ -1,10 +1,15 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Note } from './entities/note.entity';
 import { Repository } from 'typeorm';
 import { CreateNoteDto } from './dtos/create-note.dto';
-import { UpdateUserDto } from '../user/dtos/update-user.dto';
 import { UserService } from '../user/user.service';
+import { UpdateNoteDto } from './dtos/update-note.dto';
+import { TokenPayLoadDto } from '../auth/dtos/token-payload.dto';
 
 @Injectable()
 export class NoteService {
@@ -32,12 +37,32 @@ export class NoteService {
     return await this.noteRepository.save(createNoteDto);
   }
 
-  async update(updateUserDto: UpdateUserDto) {
-    return await this.noteRepository.save(updateUserDto);
+  async update(updateNoteDto: UpdateNoteDto, token: TokenPayLoadDto) {
+    const note = await this.findOne(updateNoteDto.id);
+
+    if (note.user.id !== Number(token.sub)) {
+      throw new ForbiddenException(
+        'You do not have permission to modify this note.',
+      );
+    }
+
+    const noteUpdated = {
+      ...note,
+      ...updateNoteDto,
+    };
+
+    return await this.noteRepository.save(noteUpdated);
   }
 
-  async delete(id: number) {
+  async delete(id: number, token: TokenPayLoadDto) {
     const note = await this.findOne(id);
+
+    if (note.user.id !== Number(token.sub)) {
+      throw new ForbiddenException(
+        'You do not have permission to modify this note.',
+      );
+    }
+
     return await this.noteRepository.remove(note);
   }
 }
