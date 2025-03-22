@@ -6,9 +6,18 @@ import { User } from './user/entities/user.entity';
 import { NoteModule } from './note/note.module';
 import { Note } from './note/entities/note.entity';
 import { AuthModule } from './auth/auth.module';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
+    ThrottlerModule.forRoot([
+      {
+        ttl: 10000,
+        limit: 10,
+        blockDuration: 5000,
+      },
+    ]),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -28,6 +37,11 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}
