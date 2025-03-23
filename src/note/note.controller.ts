@@ -15,8 +15,10 @@ import { UpdateNoteDto } from './dtos/update-note.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { TokenPayLoadDto } from '../auth/dtos/token-payload.dto';
 import { TokenPayLoadParam } from '../params/token-payload.param';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 @Controller('note')
 export class NoteController {
   constructor(private readonly noteService: NoteService) {}

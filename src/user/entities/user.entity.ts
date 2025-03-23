@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Note } from '../../note/entities/note.entity';
+import { ApiHideProperty } from '@nestjs/swagger';
 
 @Entity({ name: 'tb_user' })
 export class User {
@@ -25,6 +26,7 @@ export class User {
   @OneToMany(() => Note, (note) => note.user)
   notes: Note[];
 
+  @ApiHideProperty()
   @Column({ type: 'boolean', default: false })
   isAdmin: boolean;
 
