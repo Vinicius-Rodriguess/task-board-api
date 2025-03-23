@@ -10,12 +10,14 @@ import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { Bcrypt } from '../auth/bcript/bcript';
 import { TokenPayLoadDto } from '../auth/dtos/token-payload.dto';
+import { EmailService } from '../email/email.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly emailservice: EmailService,
     private readonly bcript: Bcrypt,
   ) {}
 
@@ -47,6 +49,8 @@ export class UserService {
     createUserDto.password = await this.bcript.encryptPassword(
       createUserDto.password,
     );
+
+    await this.emailservice.sendEmail(createUserDto);
 
     return await this.userRepository.save(createUserDto);
   }
