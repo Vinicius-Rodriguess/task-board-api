@@ -13,6 +13,8 @@ Este projeto é a API back-end para um sistema de gerenciamento de notas. Desenv
 - Testes unitários utilizando **Jest**.
 - Controle de acesso para administradores.
 - CRUD completo de notas e usuários.
+- Envio de Emails
+- Documentação com Swagger
 
 ---
 
@@ -26,6 +28,7 @@ Este projeto é a API back-end para um sistema de gerenciamento de notas. Desenv
 - **Guards (AuthGuard e AdminGuard)**: Proteção de rotas.
 - **Bcrypt**: Hash de senhas para maior segurança.
 - **Jest**: Testes unitários.
+- **Swagger**: Documentação.
 
 ---
 
